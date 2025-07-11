@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Box Model & Flexbox Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: float 20s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: rotate(0deg) translateX(0px); }
+            100% { transform: rotate(360deg) translateX(20px); }
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            z-index: 1;
+            position: relative;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            z-index: 1;
+            position: relative;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .quiz-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .info-card p {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .topics {
+            background: #ecf0f1;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .topics h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8em;
+        }
+        
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .topic-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .topic-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .topic-card h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .topic-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .topic-card li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 3px solid #3498db;
+            font-size: 0.9em;
+        }
+        
+        .question-section {
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .question-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        
+        .question-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            border-left: 4px solid #e74c3c;
+            margin-bottom: 20px;
+        }
+        
+        .question-box h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .question-box p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .expected-output {
+            background: #e8f5e8;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .expected-output h4 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        
+        .expected-output p {
+            color: #2c3e50;
+            font-style: italic;
+        }
+        
+        .design-showcase {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .design-showcase h4 {
+            color: #17a2b8;
+            margin-bottom: 20px;
+        }
+        
+        .target-design {
+            display: flex;
+            justify-content: center;
+            padding: 30px;
+            background: #e9ecef;
+            border-radius: 8px;
+        }
+        
+        .card-container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .card {
+            width: 320px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            margin: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-header {
+            padding: 16px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h3 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+        
+        .price {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        
+        .card-body {
+            padding: 20px;
+            flex: 1;
+        }
+        
+        .card-body p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .features {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .feature {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .card-footer {
+            padding: 16px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .btn-secondary, .btn-primary {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .requirements {
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .requirements h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .requirement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .req-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #f0c14b;
+        }
+        
+        .req-item strong {
+            color: #856404;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .req-item ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .req-item li {
+            color: #666;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        
+        .timer {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ul {
+            color: #856404;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .quiz-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .topic-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timer">
+            ⏰ Quiz Duration: 45 Minutes
+        </div>
+        
+        <div class="header">
+            <h1>CSS Mastery Quiz</h1>
+            <p>Box Model & Flexbox Challenge</p>
+        </div>
+        
+        <div class="content">
+            <div class="quiz-info">
+                <div class="info-card">
+                    <h3>📝 Single Question</h3>
+                    <p>One comprehensive challenge that tests both Box Model and Flexbox knowledge</p>
+                </div>
+                <div class="info-card">
+                    <h3>⏱️ Time Limit</h3>
+                    <p>45 minutes to complete the design challenge with explanations</p>
+                </div>
+                <div class="info-card">
+                    <h3>🎯 Challenge Type</h3>
+                    <p>Practical design replication - copy the exact visual design provided</p>
+                </div>
+                <div class="info-card">
+                    <h3>📊 Scoring</h3>
+                    <p>100 points total. 40% Code Quality, 30% Visual Accuracy, 30% Explanations</p>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>📋 Quiz Instructions</h3>
+                <ul>
+                    <li>Read each question carefully before answering</li>
+                    <li>Some questions require written explanations, others need code solutions</li>
+                    <li>You can use pen and paper for calculations</li>
+                    <li>No external resources or references allowed</li>
+                    <li>Review your answers before submitting</li>
+                    <li>Time management is crucial - spend approximately 2 minutes per question</li>
+                </ul>
+            </div>
+            
+            <div class="topics">
+                <h2>🎯 Challenge Focus Areas</h2>
+                <div class="topic-grid">
+                    <div class="topic-card">
+                        <h3>📦 Box Model Application</h3>
+                        <ul>
+                            <li>Precise padding, border, margin calculations</li>
+                            <li>Understanding box-sizing implications</li>
+                            <li>Creating consistent spacing</li>
+                            <li>Managing element dimensions</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h3>🔧 Flexbox Implementation</h3>
+                        <ul>
+                            <li>Container and item property usage</li>
+                            <li>Alignment and justification</li>
+                            <li>Flexible layouts and spacing</li>
+                            <li>Responsive design principles</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-section">
+                <h2>📋 The Quiz Question</h2>
+                <div class="question-box">
+                    <h4>CSS Layout Challenge: Create a Responsive Card Layout (100 points)</h4>
+                    <p>
+                        <strong>🎯 Your Task:</strong><br>
+                        Look at the design shown below and recreate it using HTML and CSS. You must demonstrate your understanding of both the Box Model and Flexbox concepts.
+                    </p>
+                </div>
+                
+                <div class="design-showcase">
+                    <h4>🎨 Design to Replicate:</h4>
+                    <div class="target-design">
+                        <div class="card-container">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Product Card</h3>
+                                    <span class="price">$99</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>This is a sample product description that spans multiple lines.</p>
+                                    <div class="features">
+                                        <span class="feature">Feature 1</span>
+                                        <span class="feature">Feature 2</span>
+                                        <span class="feature">Feature 3</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn-secondary">Details</button>
+                                    <button class="btn-primary">Buy Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="requirements">
+                    <h4>📋 Technical Requirements:</h4>
+                    <div class="requirement-grid">
+                        <div class="req-item">
+                            <strong>Box Model:</strong>
+                            <ul>
+                                <li>Card: 320px width, 20px padding, 2px border, 16px margin</li>
+                                <li>Header: 16px padding, 1px bottom border</li>
+                                <li>Body: 20px padding all sides</li>
+                                <li>Footer: 16px padding, 1px top border</li>
+                            </ul>
+                        </div>
+                        <div class="req-item">
+                            <strong>Flexbox Layout:</strong>
+                            <ul>
+                                <li>Header: Space between title and price</li>
+                                <li>Features: Horizontal layout with gaps</li>
+                                <li>Footer: Buttons aligned to the right</li>
+                                <li>Card: Vertical flex container</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="expected-output">
+                    <h4>📝 What You Must Submit:</h4>
+                    <p>
+                        <strong>1. Complete HTML structure</strong> - Clean, semantic markup<br>
+                        <strong>2. Complete CSS code</strong> - No frameworks, only vanilla CSS<br>
+                        <strong>3. Written explanation</strong> - Explain your Box Model calculations<br>
+                        <strong>4. Flexbox justification</strong> - Why you chose each flexbox property<br><br>
+                        <em>Your final result should match the design exactly. Pay attention to spacing, alignment, and visual hierarchy.</em>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="quiz-info">
+                <div class="info-card">
+                    <h3>🏆 Grading Criteria</h3>
+                    <p>Visual Match (30%) | Code Quality (40%) | Explanations (30%) | Pass: 70%</p>
+                </div>
+                <div class="info-card">
+                    <h3>📚 Study Tips</h3>
+                    <p>Practice with browser developer tools, create test layouts, and understand the visual aspects</p>
+                </div>
+                <div class="info-card">
+                    <h3>🔍 Success Tips</h3>
+                    <p>Study the design carefully, plan your HTML structure, then implement CSS systematically</p>
+                </div>
+                <div class="info-card">
+                    <h3>✅ Submission Format</h3>
+                    <p>HTML file, CSS file, and written explanation document - all must be provided</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
